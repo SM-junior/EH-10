@@ -1,4 +1,5 @@
 import socket
+import threading
 
 server_socket = socket.socket()
 server_socket.bind(('192.168.194.231', 2345))
@@ -35,76 +36,7 @@ server_socket.close()
 
 
 
-chat with multiple clients
-
-import socket
-import threading
-
-def handle_client(client_socket, address):
-    print(f"[+] New connection from {address}")
-
-    while True:
-        try:
-            message = client_socket.recv(1024).decode()
-            if not message:
-                break
-
-            print(f"{address}: {message}")
-            if message.strip().lower() == "bye":
-                print(f"[-] Client {address} disconnected.")
-                break
-
-            reply = input(f"Reply to {address}: ")
-            client_socket.send(reply.encode())
-
-            if reply.strip().lower() == "bye":
-                print(f"[-] You ended chat with {address}.")
-                break
-
-        except:
-            break
-
-    client_socket.close()
-
-# Main server setup
-server_socket = socket.socket()
-server_socket.bind(('0.0.0.0', 2345))
-server_socket.listen(5)
-
-print("[*] Server listening on port 2345...")
-
-while True:
-    client, addr = server_socket.accept()
-    thread = threading.Thread(target=handle_client, args=(client, addr))
-    thread.start()
-
-
-
-import socket
-server_socket=socket.socket()
-server_socket.bind('192.168.0.1', 1234)
-server_socket.listen(2)
-
-conn, address=server_socket.accept()
-
-while True:
-    msg=conn.recv(1024).decode()
-    print('client: ', msg)
-    if msg.lower()=='bye':
-        print('client left chatting')
-        break
-    
-    reply=input('server: ')
-    conn.send(reply.encode())
-    if reply.lower()=='bye':
-        print('server left chatting')
-        break
-
-    conn.close()
-    server_socket.close()
-
-import socket
-import threading
+# chat with multiple clients
 
 def handleClient(conn, address):
     print(f'New connection from {address}')
